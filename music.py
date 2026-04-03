@@ -108,14 +108,3 @@ def stop_song():
 if __name__ == '__main__':
     # Hosted on 0.0.0.0 so Docker can map it correctly
     app.run(host='0.0.0.0', port=5000, debug=True)
-# Replace pygame.mixer.init() with this:
-try:
-    pygame.mixer.pre_init(44100, -16, 2, 512)
-    pygame.mixer.init()
-except pygame.error as e:
-    print(f"Audio Error: {e}")
-    if __name__ == '__main__':
-    # '0.0.0.0' tells Flask to listen on all available network interfaces
-    app.run(host='0.0.0.0', port=5000)
-    if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
