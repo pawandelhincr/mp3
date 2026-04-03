@@ -15,7 +15,7 @@ class MacMusicPlayer:
         pygame.mixer.init()
 
         # गाने का नाम दिखाने के लिए लेबल
-        self.status = tk.Label(root, text="कोई गाना चुनें", bg='#2c3e50', fg='white', font=("Arial", 12))
+        self.status = tk.Label(root, text="कोई गाना चुनें", bg="#08192a", fg='white', font=("Arial", 12))
         self.status.pack(pady=20)
 
         # बटन्स का फ्रेम
@@ -61,3 +61,61 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = MacMusicPlayer(root)
     root.mainloop()
+    from flask import Flask, render_template, jsonify, request
+import pygame
+import os
+
+app = Flask(__name__)
+
+# Initialize Pygame Mixer
+pygame.mixer.init()
+
+# Path where your MP3 files are stored
+MUSIC_DIR = "music_files" 
+if not os.path.exists(MUSIC_DIR):
+    os.makedirs(MUSIC_DIR)
+
+@app.route('/')
+def index():
+    songs = [f for f in os.listdir(MUSIC_DIR) if f.endswith('.mp3')]
+    return render_template('index.html', songs=songs)
+
+@app.route('/play/<song_name>')
+def play_song(song_name):
+    try:
+        song_path = os.path.join(MUSIC_DIR, song_name)
+        pygame.mixer.music.load(song_path)
+        pygame.mixer.music.play()
+        return jsonify({"status": "Playing", "song": song_name})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/pause')
+def pause_song():
+    pygame.mixer.music.pause()
+    return jsonify({"status": "Paused"})
+
+@app.route('/resume')
+def resume_song():
+    pygame.mixer.music.unpause()
+    return jsonify({"status": "Resumed"})
+
+@app.route('/stop')
+def stop_song():
+    pygame.mixer.music.stop()
+    return jsonify({"status": "Stopped"})
+
+if __name__ == '__main__':
+    # Hosted on 0.0.0.0 so Docker can map it correctly
+    app.run(host='0.0.0.0', port=5000, debug=True)
+# Replace pygame.mixer.init() with this:
+try:
+    pygame.mixer.pre_init(44100, -16, 2, 512)
+    pygame.mixer.init()
+except pygame.error as e:
+    print(f"Audio Error: {e}")
+    if __name__ == '__main__':
+    # '0.0.0.0' tells Flask to listen on all available network interfaces
+    app.run(host='0.0.0.0', port=5000)
+    if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)

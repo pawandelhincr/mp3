@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DevOps MP3 Player</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: white; text-align: center; }
+        .container { margin-top: 50px; }
+        button { padding: 10px 20px; margin: 10px; cursor: pointer; border-radius: 5px; border: none; font-weight: bold; }
+        .play { background: #1db954; color: white; }
+        .stop { background: #e91e63; color: white; }
+        .song-list { list-style: none; padding: 0; }
+        .song-item { padding: 10px; border-bottom: 1px solid #333; cursor: pointer; }
+        .song-item:hover { background: #222; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 MP3 Web Player</h1>
+        <div id="controls">
+            <button class="play" onclick="fetch('/resume')">Resume</button>
+            <button class="stop" onclick="fetch('/pause')">Pause</button>
+            <button class="stop" onclick="fetch('/stop')">Stop All</button>
+        </div>
+        <ul class="song-list">
+            {% for song in songs %}
+                <li class="song-item" onclick="fetch('/play/{{ song }}')">▶ {{ song }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
